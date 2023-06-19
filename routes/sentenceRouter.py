@@ -1,12 +1,24 @@
-from flask import Blueprint, jsonify
-from services.sentenceService import rateSentence
+from flask import jsonify, request, Response
+from api import app, db
+from models.sentences import Sentence
+import datetime
+import json
 
-sentence_blueprint = Blueprint('sentenceRouter', __name__)
 
-@sentence_blueprint.route('/rate', methods=['POST'])
-def rate(request):
-    return rateSentence(request)
+@app.route('/sentimentAnalysis', methods=['POST'])
+def sentiment_analysis():
+    sentence = request.json['text']
+    data_hora_atual = datetime.datetime.now()
+    funciona = Sentence(grade=7, sentence=sentence, date=data_hora_atual)
+    db.session.add(funciona)
+    db.session.commit()
 
-@sentence_blueprint.route('/hello')
-def helloworld():
-    return jsonify({'text':'Hello'})
+    return jsonify()
+
+
+@app.route('/sentimentAnalysis', methods=['GET'])
+def sentiment_analysis_get():
+    sentences = Sentence.query.all()
+    sentences_json = [sentence.json() for sentence in sentences]
+
+    return Response(json.dumps(sentences_json), status=200, mimetype="application/json")

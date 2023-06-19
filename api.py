@@ -1,9 +1,11 @@
-from flask import Flask
-from routes.sentenceRouter import sentence_blueprint
+from flask import Flask, jsonify
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config.from_pyfile('./configuration/config.py')
 
-app.register_blueprint(sentence_blueprint, url_prefix='/sentence')
+db = SQLAlchemy(app)
+from routes.sentenceRouter import *
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
