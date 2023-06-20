@@ -3,7 +3,7 @@ from api import db
 
 class Sentence(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    grade = db.Column(db.Integer, nullable=False)
+    grade = db.Column(db.Numeric, nullable=False)
     sentence = db.Column(db.String(600), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
 
@@ -11,4 +11,4 @@ class Sentence(db.Model):
         return '<Id %r>' % self.id
 
     def json(self):
-        return {'id': self.id, 'grade': self.grade, 'sentence': self.sentence, 'date': self.date.isoformat()}
+        return {'id': self.id, 'grade': float(self.grade), 'sentence': self.sentence, 'date': self.date.isoformat()}

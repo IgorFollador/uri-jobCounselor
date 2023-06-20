@@ -27,7 +27,7 @@ TABLES = {}
 TABLES['Sentence'] = ('''
       CREATE TABLE `Sentence` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
-      `grade` int NOT NULL,
+      `grade` DECIMAL(4,2) NOT NULL,
       `sentence` varchar(600) NOT NULL,
       `date` DATETIME NOT NULL,
       PRIMARY KEY (`id`)
