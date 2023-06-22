@@ -10,6 +10,7 @@ db = SQLAlchemy(app)
 # TODO fazer migrate
 migrate = Migrate(app, db)
 from routes.sentenceRouter import *
+from routes.companyRouter import *
 
 if __name__ == '__main__':
     app.run(debug=True)

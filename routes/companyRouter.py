@@ -6,9 +6,7 @@ from api import app, db
 def create_company():
     data = request.get_json()
     new_company = Company(name=data['name'], 
-                          visibility=data['visibility'], 
-                          username=data['username'], 
-                          password=data['password'])
+                          visibility=data['visibility'])
     db.session.add(new_company)
     db.session.commit()
     return jsonify({'message': 'Company created successfully!'})

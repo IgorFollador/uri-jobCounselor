@@ -6,7 +6,7 @@ try:
       conn = mysql.connector.connect(
             host='127.0.0.1',
             user='root',
-            password='admin'
+            password='root'
       )
 except mysql.connector.Error as err:
       if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -24,12 +24,12 @@ cursor.execute("USE `jobCounselor`;")
 
 # criando tabelas
 TABLES = {}
-TABLES['Sentence'] = ('''
-      CREATE TABLE `Sentence` (
+TABLES['Company'] = ('''
+      CREATE TABLE `Company` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
-      `grade` DECIMAL(4,2) NOT NULL,
-      `sentence` varchar(600) NOT NULL,
-      `date` DATETIME NOT NULL,
+      `name` varchar(600) NOT NULL,
+      `visibility` BOOLEAN NOT NULL,
+      `grade` DECIMAL(4,2),
       PRIMARY KEY (`id`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;''')
 
