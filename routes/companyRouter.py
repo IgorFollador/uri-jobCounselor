@@ -1,6 +1,6 @@
 from flask import request, Response, jsonify
 from models.companies import Company
-from api import app, db
+from app import app, db
 
 @app.route('/company', methods=['POST'])
 def create_company():

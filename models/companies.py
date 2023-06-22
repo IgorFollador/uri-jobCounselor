@@ -1,4 +1,4 @@
-from api import db
+from app import db
 
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

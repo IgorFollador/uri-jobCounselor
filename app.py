@@ -7,7 +7,6 @@ app.config.from_pyfile('./config/config.py')
 
 
 db = SQLAlchemy(app)
-# TODO fazer migrate
 migrate = Migrate(app, db)
 from routes.sentenceRouter import *
 from routes.companyRouter import *

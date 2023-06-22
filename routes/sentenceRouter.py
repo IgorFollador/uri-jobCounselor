@@ -1,7 +1,7 @@
 from flask import request, Response
 from googletrans import Translator
 from textblob import TextBlob
-from api import app, db
+from app import app, db
 from models.sentences import Sentence
 import datetime
 import json
