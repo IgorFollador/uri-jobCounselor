@@ -6,6 +6,7 @@ class Sentence(db.Model):
     grade = db.Column(db.Numeric, nullable=False)
     sentence = db.Column(db.String(600), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
 
     def __repr__(self):
         return '<Id %r>' % self.id
