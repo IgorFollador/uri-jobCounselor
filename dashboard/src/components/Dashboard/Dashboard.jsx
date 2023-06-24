@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -9,26 +9,12 @@ export default function Dashboard({ children }) {
     const router = useRouter();
     const [companies, setCompanies] = useState([]);
 
-    const getCompanies = async () => {
-        await api.get("/companies")
+    useEffect(() => {
+        api.get("/companies")
         .then(result => {
-            console.log(result.data);
             setCompanies(result.data);
         })
-    }
-    
-    getCompanies();
-
-    const menuItems = [
-        {
-            href: '/',
-            name: 'Homepage',
-        },
-        {
-            href: '/amazon',
-            name: 'Amazon Company',
-        },
-    ]
+    }, []);
 
     return (
         <div className='min-h-screen flex flex-col'>
@@ -43,14 +29,30 @@ export default function Dashboard({ children }) {
                 <aside className='bg-slate-200 w-full md:w-60'>
                     <nav>
                         <ul>
-                        {companies.map(({ name}) => (
-                            <li className='m-2' key={name}>
+                            <li className='m-2'>
                                 <Link 
-                                    href={name}
-                                    className={`flex p-2 bg-orange-200 rounded hover:bg-orange-500 hover:text-white cursor-pointer 
-                                    ${router.asPath === name && 'bg-fuchsia-text-white'}`}
+                                    href={'/'}
+                                    className={`flex p-2 bg-orange-200 rounded hover:bg-orange-500 hover:text-white cursor-pointer`}
                                 >
-                                    {name}
+                                    Homepage
+                                </Link>
+                            </li>
+
+                            <li className='m-2'><span>Empresas:</span></li>
+                        {companies.map((company) => (
+                            company.visibility &&
+                            <li className='m-2' key={company.name}>
+                                <Link 
+                                    href={{
+                                        pathname: `/company`,
+                                        query: {
+                                            id: company.id,
+                                        },
+                                    }}
+                                    // as={`/company/${company.name.toLowerCase()}`}
+                                    className={`flex p-2 bg-orange-200 rounded hover:bg-orange-500 hover:text-white cursor-pointer`}
+                                >
+                                    {company.name}
                                 </Link>
                             </li>
                         ))}
