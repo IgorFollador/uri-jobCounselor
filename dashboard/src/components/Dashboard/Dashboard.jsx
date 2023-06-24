@@ -1,28 +1,41 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
 import Logo from '@/../public/assets/logo.png'
+import api from "../../services/api";
 
 export default function Dashboard({ children }) {
     const router = useRouter();
+    const [companies, setCompanies] = useState([]);
+
+    const getCompanies = async () => {
+        await api.get("/companies")
+        .then(result => {
+            console.log(result.data);
+            setCompanies(result.data);
+        })
+    }
+    
+    getCompanies();
 
     const menuItems = [
         {
             href: '/',
-            title: 'Homepage',
+            name: 'Homepage',
         },
         {
             href: '/amazon',
-            title: 'Amazon Company',
+            name: 'Amazon Company',
         },
     ]
 
     return (
         <div className='min-h-screen flex flex-col'>
-            <header className='sticky top-0 h-200 flex justify-center items-center bg-slate-200'>
+            <header className='sticky top-0 flex justify-center items-center bg-slate-200'>
                 <Image 
                     src={Logo}
-                    height={150}
+                    height={175}
                     alt="Job Counselor Logo"
                 />
             </header>
@@ -30,14 +43,14 @@ export default function Dashboard({ children }) {
                 <aside className='bg-slate-200 w-full md:w-60'>
                     <nav>
                         <ul>
-                        {menuItems.map(({ href, title }) => (
-                            <li className='m-2' key={title}>
+                        {companies.map(({ name}) => (
+                            <li className='m-2' key={name}>
                                 <Link 
-                                    href={href}
+                                    href={name}
                                     className={`flex p-2 bg-orange-200 rounded hover:bg-orange-500 hover:text-white cursor-pointer 
-                                    ${router.asPath === href && 'bg-fuchsia-text-white'}`}
+                                    ${router.asPath === name && 'bg-fuchsia-text-white'}`}
                                 >
-                                    {title}
+                                    {name}
                                 </Link>
                             </li>
                         ))}
