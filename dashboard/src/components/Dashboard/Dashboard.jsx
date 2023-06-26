@@ -56,6 +56,14 @@ export default function Dashboard({ children }) {
                                 </Link>
                             </li>
                         ))}
+                            <li className='m-2'>
+                                <Link 
+                                    href={'/company_form'}
+                                    className={`flex p-2 bg-green-300 rounded hover:bg-green-500 hover:text-white cursor-pointer`}
+                                >
+                                    Criar empresa
+                                </Link>
+                            </li>
                         </ul>
                     </nav>
                 </aside>

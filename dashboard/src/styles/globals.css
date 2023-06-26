@@ -25,11 +25,41 @@
     width: 40px;
 }
 
-.form-filter button {
+button[type=submit] {
     margin-left: 20px;
     padding: 5px;
     border-radius: 15px;
-    border: 1px solid black;
     color: white;
     background-color: #F97316;
+}
+
+.form-new-company {
+    margin: 30px;
+    padding: 15px;
+    border: 1px solid black;
+    margin-left: 20px;
+}
+
+.form-new-company form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-new-company .form-item {
+    margin-bottom: 30px;
+}
+
+.form-new-company [type=text] {
+    padding: 5px;
+    border: 1px solid black;
+}
+
+.form-new-company label {
+    margin-right: 10px;
+}
+
+.form-new-company .form-item {
+    display: flex;
+    align-items: center;
 }
