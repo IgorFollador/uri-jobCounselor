@@ -10,3 +10,26 @@
     width: 800px;
     height: 400px;
 }
+
+.form-filter {
+    margin: 30px;
+    padding: 15px;
+    border: 1px solid black;
+}
+
+.form-filter label {
+    margin-right: 10px;
+}
+
+.form-filter input {
+    width: 40px;
+}
+
+.form-filter button {
+    margin-left: 20px;
+    padding: 5px;
+    border-radius: 15px;
+    border: 1px solid black;
+    color: white;
+    background-color: #F97316;
+}
