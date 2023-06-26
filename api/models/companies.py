@@ -4,8 +4,8 @@ from app import db
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50))
-    visibility = db.Column(db.Boolean, default = True)
-    grade = db.Column(db.Numeric, default = 0)
+    visibility = db.Column(db.Boolean, default=True)
+    grade = db.Column(db.Numeric, default=0)
     sentences = db.relationship('Sentence', backref='company')
 
     def __repr__(self):

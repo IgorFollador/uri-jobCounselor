@@ -3,6 +3,7 @@ from app import app
 from services.sentenceService import *
 import json
 
+
 @app.route('/sentimentAnalysis', methods=['POST'])
 def sentiment_analysis():
     company_id = request.headers.get('company-id')
