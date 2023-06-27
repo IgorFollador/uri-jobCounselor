@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import Image from 'next/image'
-import Link from 'next/link'
+import Image from 'next/image';
+import Link from 'next/link';
 import Logo from '@/../public/assets/logo.png'
 
 export default function Dashboard({ children, getCompanies, companies }) {

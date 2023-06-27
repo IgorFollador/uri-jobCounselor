@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import api from "@/services/api";
 import { Chart } from "react-google-charts";
 import Modal from "react-modal";
+import Speech from "@/components/Speech";
 
 export default function Company() {
   const router = useRouter();
   const { id } = router.query;
   const [company, setCompany] = useState([]);
   const [companyAnalysis, setCompanyAnalysis] = useState([]);
-  const [filterValue, setFilterValue] = useState(24);
+  const [filterValue, setFilterValue] = useState(new Date().getDate());
   const [filterType, setFilterType] = useState('day');
   const [formattedCompanyAnalysis, setFormattedCompanyAnalysis] = useState([]);
   const [isOpen, setIsOpen] = useState(false)
@@ -23,7 +24,7 @@ export default function Company() {
 
   const getCompanyAnalysis = async (
     companyID,
-    valueFilter = 24,
+    valueFilter = new Date().getDate(),
     typeFilter = "day"
   ) => {
     let headers = {
@@ -40,8 +41,7 @@ export default function Company() {
     }
   };
 
-  useEffect(() => {
-    console.log("Company ID " + id);
+  function refreshData() {
     api.get(`/company/${id}`)
       .then((result) => {
         setCompany(result.data);
@@ -50,6 +50,11 @@ export default function Company() {
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  useEffect(() => {
+    console.log("Company ID " + id);
+    refreshData();
   }, [id]);
 
   useEffect(() => {
@@ -59,7 +64,8 @@ export default function Company() {
   }, [companyAnalysis]);
 
   function convertData(data) {
-    const formattedData = [["Data", company.name]];
+    let formattedData = [["Data", company.name]];
+    if (data.length == 0) formattedData = [];
     data.forEach((element) => {
       formattedData.push([element.date, element.grade]);
     });
@@ -72,27 +78,6 @@ export default function Company() {
     console.log('Dados do gráfico: ');
     console.log(formattedCompanyAnalysis);
   };
-
-  const chartEvents = [
-    {
-      eventName: "select",
-      callback({ chartWrapper }) {
-        const chart = chartWrapper.getChart();
-        const selection = chart.getSelection();
-        if (selection.length === 1) {
-          const [selectedItem] = selection;
-          const dataTable = chartWrapper.getDataTable();
-          const { row, column } = selectedItem;
-  
-          console.log("You selected:", {
-            row,
-            column,
-            value: dataTable?.getValue(row, column),
-          });
-        }
-      },
-    },
-  ];
 
   return (
     <div className="flex h-full flex-col justify-center items-center">
@@ -123,7 +108,7 @@ export default function Company() {
           <button type="submit">Filtrar</button>
         </form>
       </div>
-      <div className="chart mt-5 width">
+      <div className="chart mt-5">
         {
           formattedCompanyAnalysis.length ?
             <Chart
@@ -132,16 +117,19 @@ export default function Company() {
               height="100%"
               data={formattedCompanyAnalysis}
               options={chartOptions}
-              chartEvents={chartEvents}
             />
             :
             <h2>Nenhum dado encontrado!</h2>
         }
       </div>
-      <button onClick={() => setIsOpen(true)}>Simular</button>
-      <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
-        <button onClick={() => setIsOpen(false)}>Close Modal</button>
-        <h1>Modal Content</h1>
+
+      <button className="simulate-button" onClick={() => setIsOpen(true)}>Simular</button>
+
+      <Modal className="simulation-modal" isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
+        <button className="close-modal" onClick={() => setIsOpen(false)}>X</button>
+        
+        <Speech id={id} refreshData={refreshData} setIsOpen={setIsOpen} />
+
       </Modal>
 
     </div>

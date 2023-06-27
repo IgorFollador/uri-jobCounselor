@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime";
 import Dashboard from '@/components/Dashboard'
 import '@/styles/globals.css'
 import { useState } from 'react';
