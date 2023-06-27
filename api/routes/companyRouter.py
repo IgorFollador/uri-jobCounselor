@@ -1,83 +1,58 @@
-from flask import request, Response, jsonify
-from models.companies import Company
-from app import app, db
+from flask import request, Response
+from services.companyService import *
+from app import app
+import json
+
 
 @app.route('/company', methods=['POST'])
 def create_company():
     data = request.get_json()
-    new_company = Company(name=data['name'], 
-                          visibility=data['visibility'])
-    db.session.add(new_company)
-    db.session.commit()
-    return jsonify({'message': 'Company created successfully!'})
+    create_new_company(data)
+    return Response(json.dumps({'message': 'Company created successfully!'}), status=200, mimetype="application/json")
+
 
 @app.route('/companies', methods=['GET'])
 def get_all_companies():
-    companies = Company.query.all()
-    result = []
-    for company in companies:
-        company_data = {
-            'id': company.id,
-            'name': company.name,
-            'visibility': company.visibility,
-            'grade': company.grade   
-        }
-        result.append(company_data)
-    return jsonify(result)
+    companies = get_companies()
+    return Response(json.dumps(companies), status=200, mimetype="application/json")
+
 
 @app.route('/company/<int:company_id>', methods=['GET'])
 def get_company_by_id(company_id):
-    company = Company.query.get(company_id)
-
+    company = get_specific_company(company_id)
     if company:
-        company_data = {
-            'id': company.id,
-            'name': company.name,
-            'visibility': company.visibility,
-            'grade': company.grade
-        }
-        return jsonify(company_data)
+        return Response(json.dumps(company), status=200, mimetype="application/json")
     else:
-        return jsonify({'error': 'Company not found'}), 404
-    
+        return Response(json.dumps({'error': 'Company not found'}), status=404, mimetype="application/json")
+
+
 @app.route('/company/search/<string:name>', methods=['GET'])
-def get_user_by_name(name):
-    company = Company.query.filter_by(name=name).first()
-
+def get_company_by_name(name):
+    company = search_company_by_name(name)
     if company:
-        company_data = {
-            'id': company.id,
-            'name': company.name,
-            'visibility': company.visibility,
-            'grade': company.grade
-        }
-        return jsonify(company_data)
+        return Response(json.dumps(company), status=200, mimetype="application/json")
     else:
-        return jsonify({'error': 'company not found'})
+        return Response(json.dumps({'error': 'Company not found'}), status=404, mimetype="application/json")
 
 
 @app.route('/company/<int:company_id>', methods=['PUT'])
 def update_company_info(company_id):
-    company = Company.query.get(company_id)
-
+    company = get_specific_company(company_id)
     if company:
         data = request.get_json()
-        company.name = data.get('name', company.name)
-        company.visibility = data.get('visibility', company.visibility)
-
-        db.session.commit()
-
-        return jsonify({'message': 'Company information updated successfully'})
+        update_company(company_id, data)
+        return Response(json.dumps({'message': 'Company information updated successfully'}), status=200,
+                        mimetype="application/json")
     else:
-        return jsonify({'error': 'Company not found'}), 404
+        return Response(json.dumps({'error': 'Company not found'}), status=404, mimetype="application/json")
+
 
 @app.route('/company/<int:company_id>', methods=['DELETE'])
-def delete_company(company_id):
-    company = Company.query.get(company_id)
-
+def delete_company_by_id(company_id):
+    company = get_specific_company(company_id)
     if company:
-        db.session.delete(company)
-        db.session.commit()
-        return jsonify({'message': 'Company deleted successfully'})
+        delete_company(company_id)
+        return Response(json.dumps({'message': 'Company deleted successfully'}), status=200,
+                        mimetype="application/json")
     else:
-        return jsonify({'error': 'Company not found'}), 404
+        return Response(json.dumps({'error': 'Company not found'}), status=404, mimetype="application/json")
