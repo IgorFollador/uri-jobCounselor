@@ -4,13 +4,7 @@ from models.companies import Company
 import datetime
 from sqlalchemy.sql import extract
 from googletrans import Translator
-from flask import jsonify
 from app import db
-
-
-def percentage(part, total):
-    return 100 * float(part) / float(total)
-
 
 def translate(sentence):
     translator = Translator()
@@ -18,33 +12,9 @@ def translate(sentence):
     return sentenceTranslated
 
 
-def rateSentence(sentence):
-    positive = 0
-    negative = 0
-    neutral = 0
-    polarity = 0
-
-    periodSentences = [sentence]
-
-    for sentence in periodSentences:
-        polarity += sentence.sentiment.polarity
-        print(sentence, "\n", sentence.sentiment, '\n')
-
-        if (sentence.sentiment.polarity == 0):
-            neutral += 1
-        elif (sentence.sentiment.polarity < 0):
-            negative += 1
-        elif (sentence.sentiment.polarity > 0):
-            positive += 1
-
-    positive = format(percentage(positive, len(periodSentences)), '.2f')
-    negative = format(percentage(negative, len(periodSentences)), '.2f')
-    neutral = format(percentage(neutral, len(periodSentences)), '.2f')
-
-    return jsonify(sentence)
-
-
 def perform_sentiment_analysis(company_id, sentence):
+    print(sentence)
+    sentence = translate(sentence)
     text = TextBlob(sentence)
     polarity = 0
     polarity += text.sentiment.polarity
