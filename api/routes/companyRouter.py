@@ -52,7 +52,7 @@ def delete_company_by_id(company_id):
     company = get_specific_company(company_id)
     if company:
         delete_company(company_id)
-        return Response(json.dumps({'message': 'Company information updated successfully'}), status=200,
+        return Response(json.dumps({'message': 'Company deleted successfully'}), status=200,
                         mimetype="application/json")
     else:
         return Response(json.dumps({'error': 'Company not found'}), status=404, mimetype="application/json")
