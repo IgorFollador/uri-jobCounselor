@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "@/services/api";
 
-export default function CompanyForm() {
+export default function CompanyForm({getCompanies}) {
   const [companyName, setCompanyName] = useState('');
   const [companyVisibility, setCompanyVisibility] = useState(true);
 
@@ -13,6 +13,7 @@ export default function CompanyForm() {
 
     try {
       const response = await api.post("/company", payload, );
+      getCompanies();
       alert('Nova empresa cadastrada!');
     } catch (error) {
       console.error(error);

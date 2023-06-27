@@ -1,19 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router'
+import { useEffect } from 'react';
 import Image from 'next/image'
 import Link from 'next/link'
 import Logo from '@/../public/assets/logo.png'
-import api from "../../services/api";
 
-export default function Dashboard({ children }) {
-    const router = useRouter();
-    const [companies, setCompanies] = useState([]);
-
+export default function Dashboard({ children, getCompanies, companies }) {
     useEffect(() => {
-        api.get("/companies")
-        .then(result => {
-            setCompanies(result.data);
-        })
+        getCompanies();
     }, []);
 
     return (

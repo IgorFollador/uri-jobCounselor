@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import api from "@/services/api";
 import { Chart } from "react-google-charts";
+import Modal from "react-modal";
 
 export default function Company() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function Company() {
   const [filterValue, setFilterValue] = useState(24);
   const [filterType, setFilterType] = useState('day');
   const [formattedCompanyAnalysis, setFormattedCompanyAnalysis] = useState([]);
+  const [isOpen, setIsOpen] = useState(false)
 
   const chartOptions = {
     chart: {
@@ -71,6 +73,27 @@ export default function Company() {
     console.log(formattedCompanyAnalysis);
   };
 
+  const chartEvents = [
+    {
+      eventName: "select",
+      callback({ chartWrapper }) {
+        const chart = chartWrapper.getChart();
+        const selection = chart.getSelection();
+        if (selection.length === 1) {
+          const [selectedItem] = selection;
+          const dataTable = chartWrapper.getDataTable();
+          const { row, column } = selectedItem;
+  
+          console.log("You selected:", {
+            row,
+            column,
+            value: dataTable?.getValue(row, column),
+          });
+        }
+      },
+    },
+  ];
+
   return (
     <div className="flex h-full flex-col justify-center items-center">
       <h1 className="text-3xl mb-5 font-bold">{company.name}</h1>
@@ -101,14 +124,26 @@ export default function Company() {
         </form>
       </div>
       <div className="chart mt-5 width">
-        <Chart
-          chartType="Line"
-          width="100%"
-          height="100%"
-          data={formattedCompanyAnalysis}
-          options={chartOptions}
-        />
+        {
+          formattedCompanyAnalysis.length ?
+            <Chart
+              chartType="Line"
+              width="100%"
+              height="100%"
+              data={formattedCompanyAnalysis}
+              options={chartOptions}
+              chartEvents={chartEvents}
+            />
+            :
+            <h2>Nenhum dado encontrado!</h2>
+        }
       </div>
+      <button onClick={() => setIsOpen(true)}>Simular</button>
+      <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
+        <button onClick={() => setIsOpen(false)}>Close Modal</button>
+        <h1>Modal Content</h1>
+      </Modal>
+
     </div>
   );
 }
