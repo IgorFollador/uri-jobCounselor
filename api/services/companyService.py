@@ -15,7 +15,7 @@ def get_companies():
             'id': company.id,
             'name': company.name,
             'visibility': company.visibility,
-            'grade': company.grade   
+            'grade': float(company.grade)   
         }
         result.append(company_data)
     return result
@@ -27,7 +27,7 @@ def get_specific_company(company_id):
             'id': company.id,
             'name': company.name,
             'visibility': company.visibility,
-            'grade': company.grade
+            'grade': float(company.grade)
         }
         return company_data
     else:
@@ -40,7 +40,7 @@ def search_company_by_name(name):
             'id': company.id,
             'name': company.name,
             'visibility': company.visibility,
-            'grade': company.grade
+            'grade': float(company.grade)
         }
         return company_data
     else:
